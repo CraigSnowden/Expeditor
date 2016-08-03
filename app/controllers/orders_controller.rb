@@ -30,6 +30,9 @@ class OrdersController < ApplicationController
           end
         end
       end
+      if @order.line_items.count == 0
+        @order.destroy
+      end
 
       ActionCable.server.broadcast "orders", {order: @order.id}
     end
