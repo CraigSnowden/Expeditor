@@ -57,3 +57,5 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano3-puma'
 end
+
+gem "roo"
