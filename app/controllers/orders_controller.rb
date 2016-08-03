@@ -18,7 +18,7 @@ class OrdersController < ApplicationController
 
   def webhook
     payload = JSON.parse(params[:payload])
-    if payload["status"] == "CLOSED" && payload["totals"]["total_payment"].to_f > 0
+    if payload["status"] == "CLOSED" && payload["totals"]["total_price"] >= 0
       @order = Order.create(vend_id: payload["id"], notes: payload["note"], closed: false)
       payload["register_sale_products"].each do |rsp|
         product = Product.find_by(vend_id: rsp["product_id"])
