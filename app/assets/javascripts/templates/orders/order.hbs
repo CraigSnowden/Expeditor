@@ -1,0 +1,32 @@
+<div class="col-md-3">
+  <div class="panel panel-default order animated slideInRight" data-order="{{order.id}}">
+    <div class="panel-heading">Order #{{order.id}} <span class="label label-default pull-right">{{order.created_at}}</span></div>
+    <div class="panel-body">
+      <p>{{order.notes}}</p>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="col-sm-1">#</th>
+          <th scope="col">Item</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each order.line_items}}
+        <tr>
+          <td>{{this.qty}}</td>
+          <td>
+            {{this.name}}
+            {{#if this.notes}}
+            <span class="line-note">{{this.notes}}</span>
+            {{/if}}
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <button class="btn btn-block btn-success close-order" data-order="{{order.id}}">Close</button>
+  </div>
+</div>

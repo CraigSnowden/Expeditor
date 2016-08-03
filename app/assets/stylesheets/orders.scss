@@ -1,0 +1,14 @@
+
+.line-note {
+  display: block;
+  font-style: italic;
+}
+
+#orders {
+  display: flex;
+  flex-wrap:wrap;
+}
+
+.order {
+  flex: 1;
+}
