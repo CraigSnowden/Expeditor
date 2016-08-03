@@ -18,19 +18,21 @@ class OrdersController < ApplicationController
 
   def webhook
     payload = JSON.parse(params[:payload])
-    @order = Order.create(vend_id: payload["id"], notes: payload["note"], closed: false)
-    payload["register_sale_products"].each do |rsp|
-      product = Product.find_by(vend_id: rsp["product_id"])
-      unless product.nil?
-        li = @order.line_items.create(qty: rsp["quantity"], product: product)
-        if rsp["attributes"]
-          li.notes = rsp["attributes"][0]["value"]
-          li.save
+    if payload["status"] == "CLOSED" && payload["totals"]["total_payment"].to_f > 0
+      @order = Order.create(vend_id: payload["id"], notes: payload["note"], closed: false)
+      payload["register_sale_products"].each do |rsp|
+        product = Product.find_by(vend_id: rsp["product_id"])
+        unless product.nil?
+          li = @order.line_items.create(qty: rsp["quantity"], product: product)
+          if rsp["attributes"]
+            li.notes = rsp["attributes"][0]["value"]
+            li.save
+          end
         end
       end
-    end
 
-    ActionCable.server.broadcast "orders", {order: @order.id}
+      ActionCable.server.broadcast "orders", {order: @order.id}
+    end
     head :ok
   end
 end
